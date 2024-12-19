@@ -1,8 +1,8 @@
-from cog import BasePredictor
-import numpy as np
+from cog import BasePredictor # type: ignore
+import numpy as np # type: ignore
 import requests
-import torch
-from transformers import  AutoProcessor, AutoModel
+import torch # type: ignore
+from transformers import  AutoProcessor, AutoModel # type: ignore
 from PIL import Image
 
 class Predictor(BasePredictor):
