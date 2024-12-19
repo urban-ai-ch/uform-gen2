@@ -1,3 +1,4 @@
+from typing import List
 from cog import BasePredictor # type: ignore
 import numpy as np # type: ignore
 import requests
@@ -16,7 +17,8 @@ class Predictor(BasePredictor):
     def predict(
         self,
         image_url: str,
-        prompt: str
+        prompt: str,
+        max_tokens: int,
     ) -> str:
         image = Image.open(requests.get(image_url, stream=True).raw).convert("RGB")
 
@@ -28,12 +30,12 @@ class Predictor(BasePredictor):
                 **inputs,
                 do_sample=False,
                 use_cache=True,
-                max_new_tokens=256,
+                max_new_tokens=max_tokens,
                 eos_token_id=151645,
                 pad_token_id=self.processor.tokenizer.pad_token_id
             )
 
         prompt_len = inputs["input_ids"].shape[1]
-        decoded_text = self.processor.batch_decode(output[:, prompt_len:])[0]
+        decoded_text = self.processor.batch_decode(output[:, prompt_len:],skip_special_tokens=True)[0]
 
         return decoded_text
